@@ -9,17 +9,23 @@ import ManageExpense from './screen/ManageExpense'
 import { GlobalStyles } from './constant/styles';
 import { Entypo } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
+import ButtonIcon from './components/UI/ButtonIcon';
 const Stack = createNativeStackNavigator()
 const BottomTab = createBottomTabNavigator();
 
 const ExpensivesOverView = () => {
-  return <BottomTab.Navigator screenOptions={{
+  const handelONpress=(navigation)=>{
+    navigation.navigate("ManageExpense")
+  }
+
+
+  return <BottomTab.Navigator screenOptions={({navigation})=>({
     headerStyle:{backgroundColor:GlobalStyles.colors.primary500},
     headerTintColor:'white',
     tabBarStyle:{backgroundColor:GlobalStyles.colors.primary500},
     tabBarActiveTintColor:GlobalStyles.colors.accent500,
-
-  }}>
+    headerRight:({tintColor})=><ButtonIcon name={"add"} size={24} color={tintColor} onPress={()=>handelONpress(navigation)}/>
+  })}>
     <BottomTab.Screen name='RecentExpenses' component={RecentExpenses} options={{
       title:'Recent Expenses',
       tabBarLabel:'Recent Expenses',
@@ -39,7 +45,12 @@ export default function App() {
     <>
       <StatusBar style="light"  />
       <NavigationContainer>
-        <Stack.Navigator>
+        <Stack.Navigator screenOptions={{
+          headerStyle:{backgroundColor:GlobalStyles.colors.primary500},
+          headerTintColor:'white',
+
+
+        }}>
           <Stack.Screen
             name='ExpensivesOverView'
             component={ExpensivesOverView}
@@ -49,7 +60,10 @@ export default function App() {
               }
             }
           />
-          <Stack.Screen name='ManageExpense' component={ManageExpense} />
+          <Stack.Screen name='ManageExpense' component={ManageExpense} options={{
+            title:"Manage Expense",
+            presentation:'modal',
+          }} />
         </Stack.Navigator>
       </NavigationContainer>
     </>
